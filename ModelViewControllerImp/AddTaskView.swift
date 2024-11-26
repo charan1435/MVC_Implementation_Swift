@@ -8,11 +8,38 @@
 import SwiftUI
 
 struct AddTaskView: View {
+    @Environment(\.dismiss) var dismiss
+    @State var inTitle: String = ""
+    @State var isCompleted: Bool = false
+    
+    @ObservedObject var taskController: ControllerClass
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack{
+            Form{
+                TextField("Enter Task Tite", text: $inTitle)
+                Toggle("Is Task Completed", isOn: $isCompleted )
+            }
+            .navigationTitle("Add Task")
+            .toolbar{
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button(action: {
+                        taskController.addTask(title: inTitle, isCompleted: isCompleted)
+                        dismiss()
+                    }) {
+                        Text("Save")
+                            .bold()
+                        
+                    }
+                }
+            }
+            
+            
+        }
+        
     }
+    
 }
-
 #Preview {
-    AddTaskView()
+    AddTaskView(taskController: ControllerClass())
 }
